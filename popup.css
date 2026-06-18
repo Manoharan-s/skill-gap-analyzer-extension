@@ -1,0 +1,38 @@
+body {
+     width: 200px;
+    padding:30px;
+    border-radius:25%;
+    background: #222831;
+    font-family: Arial, sans-serif; 
+    
+}
+h2{
+    text-align: center;
+    color:whitesmoke;
+
+}
+
+button {
+    display: block;
+    width: 200px;   
+    margin: 0 auto; 
+    padding: 10px;
+
+    background-color: #a59d90;
+    color: whitesmoke;
+}
+
+#result {
+    margin-top: 15px;
+    white-space: pre-wrap;
+} 
+#skills{
+    display: block;
+    width: 200px;   
+    margin: 0 auto; 
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #a59d90;
+    color: whitesmoke;
+
+}
