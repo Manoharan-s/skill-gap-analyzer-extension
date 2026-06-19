@@ -6,3 +6,15 @@
 //         });
 //     }
 // });
+function GetTextFromProfile(){
+    return document.body.innerText
+
+}
+chrome.runtime.onMessage.addListener((request,sender,sendResponse)=>{
+    if (request.action==="gettext"){
+        sendResponse({
+            text:GetTextFromProfile()
+        })
+    }
+}
+)
