@@ -36,3 +36,7 @@ button {
     color: whitesmoke;
 
 }
+.button-container {
+    display: flex;
+    gap: 10px;
+}
