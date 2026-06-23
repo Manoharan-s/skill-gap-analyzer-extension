@@ -20,8 +20,8 @@ document.getElementById("saveBtn").addEventListener("click", () => {
     }
 
     const skills = rawSkills
-        .split(",")
-        .map(skill => skill.trim());
+    .split(/[,\s]+/)
+    .filter(skill => skill.trim() !== "");
 
     chrome.storage.local.set({
         userSkills: skills
