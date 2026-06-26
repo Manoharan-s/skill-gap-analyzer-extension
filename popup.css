@@ -6,6 +6,7 @@ body {
     font-family: Arial, sans-serif; 
     
 }
+
 h2{
     text-align: center;
     color:whitesmoke;
@@ -16,7 +17,7 @@ button {
     display: block;
     width: 200px;   
     margin: 0 auto; 
-    padding: 10px;
+    padding: 5px;
 
     background-color: #a59d90;
     color: whitesmoke;
@@ -39,4 +40,50 @@ button {
 .button-container {
     display: flex;
     gap: 10px;
+}
+#closeBtn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #555;
+    margin-right:0px;
+}
+
+ #closeBtn:hover {
+    color: red;
+}
+#ds{
+    width:25px;
+    height:25px; 
+}
+#analysebtn img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+#analysebtn span {
+    display: inline-block;
+    
+}
+#analysebtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding:5px;
+    margin: 0 auto;
+
+    width: 300px;      /* Adjust as needed */
+
+    background-color: #a59d90;
+    color: whitesmoke;
+
+    cursor: pointer;
+}
+#saveBtn {
+    width: 300px;      /* Adjust as needed */
+    cursor: pointer;
 }

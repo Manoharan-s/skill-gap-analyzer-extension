@@ -83,50 +83,58 @@ async function testAI(jobDescription) {
             - Certifications
             - Professional competencies
 
-            Rules:
-            - Return ONLY a JSON array.
-            - Remove duplicates.
-            - Preserve the original skill names.
-            - Do not explain.
-            - Do not greet.
-            - Do not use markdown.
-            - Give everything in Lowercase
-            - Do NOT infer skills.
-            - Do NOT generate related skills.
-            - Do NOT expand abbreviations.
-            - Do NOT create new combinations.
-            - Do NOT guess competencies.
-            - If a skill is not explicitly present in the input, do not include it.
-            -Return only the skills exactly as they appear.
+            Include:
+
+                    Programming languages
+                    Frameworks
+                    Libraries
+                    Tools
+                    Software
+                    Platforms
+                    Databases
+                    Cloud technologies
+                    DevOps technologies
+                    APIs
+                    Technical concepts
+                    Engineering skills
+                    Domain-specific skills
+                    Methodologies
+                    Business skills
+                    Analytical skills
+                    Project management skills
+                    Professional competencies
+                    Industry-specific knowledge
+                    Technical certifications
+
             Exclude:
-            - Languages spoken (Tamil, Telugu, Hindi, English, etc.)
-            - Educational streams (Arts, Science, Commerce, etc.)
-            - Degrees and college names
-            - Company names
-            - Person names
-            - Locations
-            - Sports and hobbies (Kho Kho, Cricket, Football, Chess, etc.)
-            - Interests
-            - Generic profile headings
-            Extract ONLY skills that are explicitly mentioned.:
 
-            Do NOT infer or generate related skills.
-
-            Do NOT include:
-            - Interests
-            - Hobbies
-            - Volunteer activities
-            - Clubs
-            - Society memberships
-            - Languages spoken
-            - Educational streams
-            - Company names
-            - Locations
-            - Person names
-            - Awards
-            - Project names (unless they are widely recognized technologies)
-
+                    Languages spoken
+                    Degrees, educational streams, college names, and universities
+                    Company names
+                    Person names
+                    Locations
+                    Sports and hobbies
+                    Interests
+                    Volunteer activities
+                    Clubs and societies
+                    Extracurricular activities
+                    Event management
+                    Event organizing
+                    Training programs
+                    Workshops
+                    Awards
+                    Project names (unless they are widely recognized technologies)
+                    Generic profile headings
+                    Soft skills
+                    Certifications that are not technical
             Remove duplicate skills.
+            Return:
+
+            A JSON array only.
+            All skills in lowercase.
+            Remove duplicates.
+            Preserve the exact skill names as written.
+            Do not infer, guess, expand abbreviations, generate related skills, or create new combinations.
 
             Return only skills that a recruiter would compare against a job requirement.
             `
@@ -143,8 +151,11 @@ async function testAI(jobDescription) {
     const data = await response.json();
 
     console.log(data);
+    
 
     console.log(data.choices[0].message.content);
+    document.getElementById("result").innerText =
+                    data.choices[0].message.content;
 }
 document.getElementById("analysebtn").addEventListener("click", async () => {
     // document.getElementById("result").innerText = "";
@@ -177,9 +188,6 @@ document.getElementById("analysebtn").addEventListener("click", async () => {
                     console.log("Response is undefined");
                     return;
                 }
-
-                document.getElementById("result").innerText =
-                    response.text;
                 await testAI(response.text);
                 
             }
@@ -192,4 +200,7 @@ document.getElementById("analysebtn").addEventListener("click", async () => {
 
 }
 );
+document.getElementById("closeBtn").addEventListener("click", () => {
+    window.close();
+});
 
