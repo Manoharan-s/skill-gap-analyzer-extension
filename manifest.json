@@ -2,7 +2,7 @@
   "manifest_version":3,
   "name":"Skill Gap Analyser",
   "version":"1.0",
-  "description":"Compare Skills With Linkedin Profile and Jobs",
+  "description":"Compare Skills With LinkedIn Jobs",
   "permissions":["activeTab","tabs","storage"],
   "host_permissions":[
     "<all_urls>"

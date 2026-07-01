@@ -49,94 +49,72 @@ async function testAI(jobDescription) {
             content: `
             You are an AI skill extraction engine.
 
-            Analyze the given professional text. The text may be from:
-            - A LinkedIn profile
-            - A Resume
-            - A Job Description
-            - A Portfolio
-            - Any professional document
+Analyze the provided professional text (LinkedIn profile, resume, job description, portfolio, or similar).
 
-            Extract every professional skill that is explicitly mentioned, including but not limited to:
+Extract ONLY explicit recruiter-comparable skills.
 
-            - Technical skills
-            - Domain-specific skills
-            - Engineering skills
-            - Programming languages
-            - Frameworks
-            - Libraries
-            - Tools
-            - Software
-            - Platforms
-            - Databases
-            - Cloud technologies
-            - DevOps technologies
-            - APIs
-            - Methodologies
-            - Technical concepts
-            - Core subject knowledge
-            - Industry-specific knowledge
-            - Business skills
-            - Analytical skills
-            - Leadership skills
-            - Communication skills
-            - Project management skills
-            - Certifications
-            - Professional competencies
+Include ONLY:
+- Programming languages
+- Frameworks
+- Libraries
+- Databases
+- Developer tools
+- Software
+- Platforms
+- Cloud technologies
+- DevOps technologies
+- APIs
+- Operating systems
+- Technical methodologies
+- Engineering concepts
+- AI/ML technologies
+- Testing frameworks
+- Build tools
+- Version control systems
+- Technical certifications
 
-            Include:
+Exclude:
+- Project names
+- Company names
+- Person names
+- College names
+- Degrees
+- Locations
+- Languages spoken
+- Hobbies
+- Interests
+- Volunteer activities
+- Clubs and societies
+- Awards
+- Workshops
+- Training programs
+- Event management
+- Event organizing
+- Generic profile headings
+- Soft skills
+- Business responsibilities
+- Job responsibilities
+- Features implemented
+- Product capabilities
+- Functional requirements
+- User stories
+- Business domains
+- Team activities
 
-                    Programming languages
-                    Frameworks
-                    Libraries
-                    Tools
-                    Software
-                    Platforms
-                    Databases
-                    Cloud technologies
-                    DevOps technologies
-                    APIs
-                    Technical concepts
-                    Engineering skills
-                    Domain-specific skills
-                    Methodologies
-                    Business skills
-                    Analytical skills
-                    Project management skills
-                    Professional competencies
-                    Industry-specific knowledge
-                    Technical certifications
-
-            Exclude:
-
-                    Languages spoken
-                    Degrees, educational streams, college names, and universities
-                    Company names
-                    Person names
-                    Locations
-                    Sports and hobbies
-                    Interests
-                    Volunteer activities
-                    Clubs and societies
-                    Extracurricular activities
-                    Event management
-                    Event organizing
-                    Training programs
-                    Workshops
-                    Awards
-                    Project names (unless they are widely recognized technologies)
-                    Generic profile headings
-                    Soft skills
-                    Certifications that are not technical
-            Remove duplicate skills.
-            Return:
-
-            A JSON array only.
-            All skills in lowercase.
-            Remove duplicates.
-            Preserve the exact skill names as written.
-            Do not infer, guess, expand abbreviations, generate related skills, or create new combinations.
-
-            Return only skills that a recruiter would compare against a job requirement.
+Strict Rules:
+- Do NOT infer skills.
+- Do NOT generate related skills.
+- Do NOT expand abbreviations.
+- Do NOT create new combinations.
+- Do NOT include project names.
+- Do NOT include feature names.
+- Do NOT include responsibilities.
+- Do NOT include workflow descriptions.
+- Only include technologies or established professional skills explicitly mentioned.
+- Preserve the original wording.
+- Convert every skill to lowercase.
+- Remove duplicates.
+- Return ONLY a valid JSON array.
             `
 },
                 {
@@ -149,13 +127,62 @@ async function testAI(jobDescription) {
     );
 
     const data = await response.json();
+    let aiResponse = data.choices[0].message.content;
+
+    aiResponse = aiResponse
+        .replace("```json", "")
+        .replace("```", "")
+        .trim();
+    console.log(aiResponse);
+
+    const aiSkills = JSON.parse(aiResponse);
+    console.log("AI Skills:", aiSkills);
+    if (aiSkills.length === 0) {
+
+    document.getElementById("result").innerHTML =
+        "<p>No technical skills were found in this profile.</p>";
+
+    document.getElementById("result").style.display = "block";
+
+    return;
+}
+    chrome.storage.local.get("userSkills", (data) => {
+
+        console.log("Saved Skills:", data.userSkills);
+    
 
     console.log(data);
+    const savedSkills = data.userSkills.map(skill =>
+        skill.toLowerCase().replace(/[.\-\s]/g, "").trim()
+    );
+
+    const jobSkills = aiSkills.map(skill =>
+        skill.toLowerCase().replace(/[.\-\s]/g, "").trim()
+    );
+    console.log("Normalized Saved:", savedSkills);
+    console.log("Normalized Job:", jobSkills);
+    const matchedSkills = jobSkills.filter(skill =>
+    savedSkills.includes(skill)
+);
+    const unmatchedSkills = jobSkills.filter(skill =>
+    !savedSkills.includes(skill)
+);
+    console.log("Matched:", matchedSkills);
+    console.log("Unmatched:", unmatchedSkills);
+    document.getElementById("matchedSkills").innerHTML =
+    matchedSkills.join("<br>");
+
+    document.getElementById("unmatchedSkills").innerHTML =
+    unmatchedSkills.join("<br>");
+    document.getElementById("result").style.display = "block";
+
+});
+    
     
 
     console.log(data.choices[0].message.content);
-    document.getElementById("result").innerText =
-                    data.choices[0].message.content;
+    // document.getElementById("result").innerText =
+    //                 data.choices[0].message.content;
 }
 document.getElementById("analysebtn").addEventListener("click", async () => {
     // document.getElementById("result").innerText = "";

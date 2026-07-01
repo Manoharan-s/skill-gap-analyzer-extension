@@ -1,5 +1,5 @@
 body {
-     width: 200px;
+     width: 300px;
     padding:30px;
     border-radius:25%;
     background: #222831;
@@ -24,8 +24,10 @@ button {
 }
 
 #result {
-    margin-top: 15px;
-    white-space: pre-wrap;
+    margin-top: 10px;
+    background-color: #a59d90;
+    color: whitesmoke;
+    
 } 
 #skills{
     display: block;
@@ -86,4 +88,55 @@ button {
 #saveBtn {
     width: 300px;      /* Adjust as needed */
     cursor: pointer;
+}
+.skills-container{
+    display:flex;
+    gap:20px;
+    margin-top:20px;
+    align-items:flex-start;
+    
+}
+
+.skills-box{
+    
+    flex:1;
+}
+
+.skills-box h3{
+    margin:0 0 8px 0;
+}
+
+.skills-box div{
+    line-height:1.6;
+}
+#skillsTable{
+    width:100%;
+    border-collapse:collapse;
+}
+
+#skillsTable th{
+    text-align:left;
+    padding:8px;
+    border-bottom:2px solid white;
+    white-space: nowrap;
+}
+
+#skillsTable td{
+    vertical-align:top;
+    padding:8px;
+}
+#skillsTable{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+}
+
+#skillsTable th,
+#skillsTable td{
+    width:50%;
+    padding:8px;
+    text-align:left;
+    vertical-align:top;
+    word-wrap:break-word;
+    overflow-wrap:break-word;
 }
