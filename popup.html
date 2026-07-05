@@ -18,29 +18,36 @@
   <div class="button-container">
     <button id="saveBtn">Save Skills</button>
     <button id="analysebtn">
-      <img id ="ds" src="icons/ChatGPT Image Jun 26, 2026, 06_46_11 PM.png"/>
-      <span>Analyze</span>
-    </button>
+    <img id="aiIcon"
+         src="icons/ChatGPT Image Jun 26, 2026, 06_46_11 PM.png">
+
+    <span id="analyseText">
+        Analyze
+    </span>
+
+</button>
 </div>
     <div id="result" style="display:none;">
 
-    <table id="skillsTable">
+    <div class="result-section">
 
-        <thead>
-            <tr>
-                <th>Matched Skills</th>
-                <th>Missing Skills</th>
-            </tr>
-        </thead>
+        <h3 id="matchedTitle"> Matched Skills</h3>
 
-        <tbody>
-            <tr>
-                <td id="matchedSkills"></td>
-                <td id="unmatchedSkills"></td>
-            </tr>
-        </tbody>
+        <ul id="matchedSkills"></ul>
 
-    </table>
+    </div>
+
+    <hr>
+
+    <div class="result-section">
+
+        <h3 id="missingTitle"> Missing Skills</h3>
+
+        <ul id="unmatchedSkills"></ul>
+
+    </div>
+
+</div>
 
 </div>
     <script src="config.js"></script>

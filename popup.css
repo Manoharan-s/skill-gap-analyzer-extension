@@ -109,34 +109,32 @@ button {
 .skills-box div{
     line-height:1.6;
 }
-#skillsTable{
-    width:100%;
-    border-collapse:collapse;
+
+#result{
+    margin-top:20px;
 }
 
-#skillsTable th{
-    text-align:left;
-    padding:8px;
-    border-bottom:2px solid white;
-    white-space: nowrap;
+.result-section{
+    margin-bottom:20px;
 }
 
-#skillsTable td{
-    vertical-align:top;
-    padding:8px;
-}
-#skillsTable{
-    width:100%;
-    border-collapse:collapse;
-    table-layout:fixed;
+.result-section h3{
+    color:white;
+    margin-bottom:10px;
 }
 
-#skillsTable th,
-#skillsTable td{
-    width:50%;
-    padding:8px;
-    text-align:left;
-    vertical-align:top;
-    word-wrap:break-word;
-    overflow-wrap:break-word;
+.result-section ul{
+    margin:0;
+    padding-left:20px;
+}
+
+.result-section li{
+    color:white;
+    margin-bottom:6px;
+}
+
+hr{
+    border:none;
+    border-top:1px solid #555;
+    margin:15px 0;
 }

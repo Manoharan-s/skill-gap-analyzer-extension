@@ -30,7 +30,7 @@ document.getElementById("saveBtn").addEventListener("click", () => {
     alert("Skills Saved Successfully");
 
 });
-async function testAI(jobDescription) {
+async function testAI(jobDescription,userSkills) {
     console.log("Testing AI with API Key:",CONFIG.API_KEY);
 
     const response = await fetch(
@@ -43,84 +43,325 @@ async function testAI(jobDescription) {
             },
             body: JSON.stringify({
                 model: "deepseek/deepseek-chat",
+                temperature: 0,
                messages: [
                {
             role: "system",
-            content: `
-            You are an AI skill extraction engine.
+            content:  `
+You are an expert AI Technical Skill Extraction and Normalization Engine used by recruiters and Applicant Tracking Systems (ATS).
 
-Analyze the provided professional text (LinkedIn profile, resume, job description, portfolio, or similar).
+You will receive TWO inputs:
 
-Extract ONLY explicit recruiter-comparable skills.
+1. User Skills
+2. Job Description (or LinkedIn Profile, Resume, Portfolio, etc.)
 
-Include ONLY:
-- Programming languages
-- Frameworks
-- Libraries
-- Databases
-- Developer tools
-- Software
-- Platforms
-- Cloud technologies
-- DevOps technologies
-- APIs
-- Operating systems
-- Technical methodologies
-- Engineering concepts
-- AI/ML technologies
-- Testing frameworks
-- Build tools
-- Version control systems
-- Technical certifications
+Your ONLY responsibilities are:
+
+1. Normalize the User Skills.
+2. Extract explicit technical skills from the Job Description.
+3. Normalize the extracted Job Skills.
+4. Return both normalized lists.
+
+DO NOT compare the skills.
+
+====================================================
+STEP 1 - NORMALIZE USER SKILLS
+====================================================
+
+Normalize every user skill into one canonical industry-standard name.
+
+Ignore differences in:
+
+- Letter case
+- Spaces
+- Dots
+- Hyphens
+- Underscores
+
+Examples:
+
+ReactJS
+React.js
+React
+
+→ react
+
+Node
+NodeJS
+Node.js
+
+→ nodejs
+
+Express
+ExpressJS
+Express.js
+
+→ express
+
+JS
+JavaScript
+
+→ javascript
+
+TS
+TypeScript
+
+→ typescript
+
+SpringBoot
+
+→ spring boot
+
+Postgres
+
+→ postgresql
+
+Mongo
+
+→ mongodb
+
+Git SCM
+
+→ git
+
+REST API
+REST APIs
+RESTful API
+RESTful APIs
+RESTful Web Services
+
+→ rest api
+
+OOP
+OOPS
+Object Oriented Programming
+Object-Oriented Programming
+Object Oriented Design
+Object-Oriented Design
+
+→ oops
+
+DSA
+Data Structures
+Algorithms
+Data Structures and Algorithms
+
+→ dsa
+
+GenAI
+Generative AI
+
+→ generative ai
+
+LLM
+Large Language Model
+
+→ llm
+
+AI/ML
+Artificial Intelligence and Machine Learning
+
+→ ai/ml
+
+====================================================
+STEP 2 - EXTRACT TECHNICAL SKILLS
+====================================================
+
+Extract ONLY explicit technical skills mentioned in the Job Description.
+
+Include ONLY recruiter-comparable technical skills.
+
+Examples include:
+
+• Programming Languages
+• Frameworks
+• Libraries
+• Databases
+• Cloud Platforms
+• DevOps Technologies
+• APIs
+• Operating Systems
+• Version Control Systems
+• Build Tools
+• Testing Frameworks
+• AI / ML Technologies
+• Data Technologies
+• Software Tools
+• Engineering Methodologies
+• Technical Certifications
 
 Exclude:
-- Project names
-- Company names
-- Person names
-- College names
-- Degrees
-- Locations
-- Languages spoken
-- Hobbies
-- Interests
-- Volunteer activities
-- Clubs and societies
-- Awards
-- Workshops
-- Training programs
-- Event management
-- Event organizing
-- Generic profile headings
-- Soft skills
-- Business responsibilities
-- Job responsibilities
-- Features implemented
-- Product capabilities
-- Functional requirements
-- User stories
-- Business domains
-- Team activities
 
-Strict Rules:
-- Do NOT infer skills.
-- Do NOT generate related skills.
-- Do NOT expand abbreviations.
-- Do NOT create new combinations.
-- Do NOT include project names.
-- Do NOT include feature names.
-- Do NOT include responsibilities.
-- Do NOT include workflow descriptions.
-- Only include technologies or established professional skills explicitly mentioned.
-- Preserve the original wording.
-- Convert every skill to lowercase.
-- Remove duplicates.
-- Return ONLY a valid JSON array.
-            `
-},
+• Company names
+• Person names
+• College names
+• Degree names
+• Locations
+• Project names
+• Product names
+• Product features
+• Responsibilities
+• Soft skills
+• Business domains
+• Awards
+• Workshops
+• Volunteer activities
+• Languages
+• Hobbies
+
+Only include technologies that are EXPLICITLY mentioned.
+
+Never infer technologies.
+
+====================================================
+STEP 3 - NORMALIZE JOB SKILLS
+====================================================
+
+Normalize every extracted Job Skill using the EXACT SAME normalization rules used for User Skills.
+
+Always return ONE canonical skill name.
+
+Never return aliases.
+
+Examples:
+
+ReactJS
+React.js
+
+→ react
+
+Node.js
+NodeJS
+
+→ nodejs
+
+JS
+
+→ javascript
+
+Postgres
+
+→ postgresql
+
+Mongo
+
+→ mongodb
+
+Algorithms
+
+→ dsa
+
+Object-Oriented Programming
+
+→ oops
+
+RESTful APIs
+
+→ rest api
+
+====================================================
+IMPORTANT RULES
+====================================================
+
+Concepts and technologies are NOT interchangeable.
+
+Do NOT normalize these:
+
+Java ≠ Spring Boot
+
+Python ≠ Django
+
+Python ≠ AI/ML
+
+SQL ≠ Oracle
+
+SQL ≠ PostgreSQL
+
+DBMS ≠ Oracle
+
+DBMS ≠ PostgreSQL
+
+OS ≠ Windows
+
+OS ≠ Linux
+
+React ≠ Angular
+
+Node.js ≠ Express
+
+Docker ≠ Kubernetes
+
+API ≠ REST API
+
+AWS ≠ Azure
+
+Azure ≠ GCP
+
+Git ≠ GitHub
+
+====================================================
+OUTPUT RULES
+====================================================
+
+1. Remove duplicate skills.
+
+2. Preserve only canonical skill names.
+
+3. Sort both arrays alphabetically.
+
+4. Return ONLY valid JSON.
+
+5. Do NOT return explanations.
+
+6. Do NOT return Markdown.
+
+7. Do NOT return json.
+
+8. If no technical skills are found in the Job Description, return an empty jobSkills array.
+If a canonical skill represents multiple synonymous terms, always return the canonical name even if only one synonym appears.
+
+Examples:
+
+Data Structures → dsa
+
+Algorithms → dsa
+
+Object-Oriented Programming → oops
+
+Object-Oriented Design → oops
+
+ReactJS → react
+
+Node.js → nodejs
+
+JavaScript → javascript
+====================================================
+OUTPUT FORMAT
+====================================================
+
+{
+  "userSkills": [
+    "java",
+    "javascript",
+    "nodejs",
+    "oops",
+    "react"
+  ],
+  "jobSkills": [
+    "docker",
+    "java",
+    "nodejs",
+    "react",
+    "spring boot"
+  ]
+}`
+}
+,
                 {
-                        role: "user",
-                        content: jobDescription
-                }
+                role: "user",
+                content: `User Skills:
+                ${userSkills.join(", ")}
+                Job Description:${jobDescription}`}
                     ]
             })
         }
@@ -134,10 +375,33 @@ Strict Rules:
         .replace("```", "")
         .trim();
     console.log(aiResponse);
+    let result;
+    try {
+    result = JSON.parse(aiResponse);
+    } catch (error) {
+    alert("Failed to parse AI response.");
+    console.error(error);
+    return;
+}
 
-    const aiSkills = JSON.parse(aiResponse);
-    console.log("AI Skills:", aiSkills);
-    if (aiSkills.length === 0) {
+    const normalizedUserSkills = result.userSkills;
+    const jobSkills = result.jobSkills;
+    console.log("Normalized User Skills:", normalizedUserSkills);
+    console.log("Job Skills:", jobSkills);
+    console.log("result",result);
+    const matchedSkills = jobSkills.filter(skill =>normalizedUserSkills.includes(skill));
+    const unmatchedSkills = jobSkills.filter(skill =>!normalizedUserSkills.includes(skill));
+    console.log("Matched Skills:", matchedSkills);
+    console.log("Missing Skills:", unmatchedSkills);
+    let matchedHTML = "";
+    matchedSkills.forEach(skill => {matchedHTML += `<li>${skill}</li>`;
+});
+    console.log("matched html",matchedHTML)
+    document.getElementById("matchedSkills").innerHTML =matchedHTML;
+    let missingHTML = "";
+    unmatchedSkills.forEach(skill => {missingHTML += `<li>${skill}</li>`;
+});
+    if (matchedSkills.length === 0 && unmatchedSkills.length === 0) {
 
     document.getElementById("result").innerHTML =
         "<p>No technical skills were found in this profile.</p>";
@@ -146,40 +410,15 @@ Strict Rules:
 
     return;
 }
-    chrome.storage.local.get("userSkills", (data) => {
-
-        console.log("Saved Skills:", data.userSkills);
-    
-
-    console.log(data);
-    const savedSkills = data.userSkills.map(skill =>
-        skill.toLowerCase().replace(/[.\-\s]/g, "").trim()
-    );
-
-    const jobSkills = aiSkills.map(skill =>
-        skill.toLowerCase().replace(/[.\-\s]/g, "").trim()
-    );
-    console.log("Normalized Saved:", savedSkills);
-    console.log("Normalized Job:", jobSkills);
-    const matchedSkills = jobSkills.filter(skill =>
-    savedSkills.includes(skill)
-);
-    const unmatchedSkills = jobSkills.filter(skill =>
-    !savedSkills.includes(skill)
-);
-    console.log("Matched:", matchedSkills);
-    console.log("Unmatched:", unmatchedSkills);
-    document.getElementById("matchedSkills").innerHTML =
-    matchedSkills.join("<br>");
-
-    document.getElementById("unmatchedSkills").innerHTML =
-    unmatchedSkills.join("<br>");
+    console.log("unmatched html",missingHTML)
+    document.getElementById("unmatchedSkills").innerHTML =missingHTML;
+    document.getElementById("matchedTitle").innerText =`Matched Skills (${matchedSkills.length})`;
+    document.getElementById("missingTitle").innerText =`Missing Skills (${unmatchedSkills.length})`;
     document.getElementById("result").style.display = "block";
-
-});
     
-    
-
+    document.getElementById("analysebtn").disabled = false;
+    document.getElementById("aiIcon").src ="icons/ChatGPT Image Jun 26, 2026, 06_46_11 PM.png";
+    document.getElementById("analyseText").innerText ="Analyze";
     console.log(data.choices[0].message.content);
     // document.getElementById("result").innerText =
     //                 data.choices[0].message.content;
@@ -203,6 +442,15 @@ document.getElementById("analysebtn").addEventListener("click", async () => {
             active: true,
             currentWindow: true
         });
+        const analyseBtn = document.getElementById("analysebtn");
+        const aiIcon = document.getElementById("aiIcon");
+        const analyseText = document.getElementById("analyseText");
+
+        analyseBtn.disabled = true;
+
+        aiIcon.src = "icons/icon.gif";
+
+        analyseText.innerText = "Analyzing...";
 
         chrome.tabs.sendMessage(
             tab.id,
@@ -215,7 +463,7 @@ document.getElementById("analysebtn").addEventListener("click", async () => {
                     console.log("Response is undefined");
                     return;
                 }
-                await testAI(response.text);
+                await testAI(response.text,userSkills);
                 
             }
         );
