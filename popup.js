@@ -30,6 +30,7 @@ document.getElementById("saveBtn").addEventListener("click", () => {
     alert("Skills Saved Successfully");
 
 });
+let modell = "deepseek/deepseek-chat";
 async function testAI(jobDescription,userSkills) {
     console.log("Testing AI with API Key:",CONFIG.API_KEY);
 
@@ -42,7 +43,7 @@ async function testAI(jobDescription,userSkills) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                model: "deepseek/deepseek-chat",
+                model: modell,
                 temperature: 0,
                messages: [
                {
@@ -298,7 +299,7 @@ AWS ≠ Azure
 Azure ≠ GCP
 
 Git ≠ GitHub
-
+Dont predict skills by your own give skills that present only in the job description.
 ====================================================
 OUTPUT RULES
 ====================================================
@@ -366,6 +367,18 @@ OUTPUT FORMAT
             })
         }
     );
+     if (response.status === 402 || response.status === 404) {
+
+        console.log("DeepSeek failed. Switching to openrouter/free");
+
+        modell = "openrouter/free";
+
+        return testAI(jobDescription, userSkills);
+    }
+    if (!response.ok) {
+    alert("AI request failed.");
+    return;
+}
 
     const data = await response.json();
     let aiResponse = data.choices[0].message.content;
@@ -389,18 +402,30 @@ OUTPUT FORMAT
     console.log("Normalized User Skills:", normalizedUserSkills);
     console.log("Job Skills:", jobSkills);
     console.log("result",result);
-    const matchedSkills = jobSkills.filter(skill =>normalizedUserSkills.includes(skill));
+    const matchedSkills = jobSkills.filter(skill =>
+        normalizedUserSkills.includes(skill));
     const unmatchedSkills = jobSkills.filter(skill =>!normalizedUserSkills.includes(skill));
     console.log("Matched Skills:", matchedSkills);
     console.log("Missing Skills:", unmatchedSkills);
+    const totalSkills = matchedSkills.length + unmatchedSkills.length;
+    const matchScore =
+    totalSkills === 0
+    ? 0
+    : Math.round((matchedSkills.length / totalSkills) * 100);
+    console.log("Match Score:", matchScore);
     let matchedHTML = "";
-    matchedSkills.forEach(skill => {matchedHTML += `<li>${skill}</li>`;
+    matchedSkills.forEach(skill => 
+        {
+            const formattedSkill =skill.charAt(0).toUpperCase() + skill.slice(1);
+            matchedHTML += `<li>${formattedSkill}</li>`;
 });
     console.log("matched html",matchedHTML)
     document.getElementById("matchedSkills").innerHTML =matchedHTML;
     let missingHTML = "";
-    unmatchedSkills.forEach(skill => {missingHTML += `<li>${skill}</li>`;
-});
+    unmatchedSkills.forEach(skill => {
+        const formattedSkill = skill.charAt(0).toUpperCase() + skill.slice(1);
+        missingHTML += `<li>${formattedSkill}</li>`;
+    });
     if (matchedSkills.length === 0 && unmatchedSkills.length === 0) {
 
     document.getElementById("result").innerHTML =
@@ -415,6 +440,15 @@ OUTPUT FORMAT
     document.getElementById("matchedTitle").innerText =`Matched Skills (${matchedSkills.length})`;
     document.getElementById("missingTitle").innerText =`Missing Skills (${unmatchedSkills.length})`;
     document.getElementById("result").style.display = "block";
+    document.getElementById("score-container").style.display = "flex";
+    const circlee = document.querySelector(".circle");
+    circlee.style.background =
+    `conic-gradient(
+         #DFD0B8 ${matchScore}%,
+        #FFFFFF ${matchScore}%
+    )`;
+    document.getElementById("score").innerText = `${matchScore}%`;
+    // document.querySelector(".circle").style.display = "flex";
     
     document.getElementById("analysebtn").disabled = false;
     document.getElementById("aiIcon").src ="icons/ChatGPT Image Jun 26, 2026, 06_46_11 PM.png";

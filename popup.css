@@ -138,3 +138,54 @@ hr{
     border-top:1px solid #555;
     margin:15px 0;
 }
+#matchedSkills, #unmatchedSkills{
+    max-height:100px;
+    overflow-y:auto;
+    font-size:14px;
+}
+hr {
+    border: 0;
+    border-top: 2px solid #7c7468;
+    margin: 20px 0;
+}
+.circle{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+     background: conic-gradient(
+        orange 70%,
+        lightgray 70%
+     );
+}
+.inner{
+    width:25px;
+    height:25px;
+    background:white;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:0;
+
+}
+#score-container{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+.score-text h2{
+    color:white;
+    font-size:15px;
+    font-weight:bold;
+    margin:0;
+    text-align:left;
+}
+.score-text p{
+    margin:5px 0 0 0;
+    color:#DFD0B8;
+    font-size:18px;
+    font-weight:bold;
+}
