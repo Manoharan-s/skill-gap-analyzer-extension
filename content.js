@@ -18,7 +18,7 @@
 //         })
 //     }
 // })
-alert("CONTENT SCRIPT INJECTED");
+// alert("CONTENT SCRIPT INJECTED");
 function GetTextFromProfile() {
     return document.body.innerText;
 }

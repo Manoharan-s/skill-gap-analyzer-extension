@@ -7,7 +7,7 @@
     "48": "icons/48.png",
     "128": "icons/128.png"
   },
-  "description":"Compare Skills With LinkedIn Jobs",
+  "description":"Compare Skills With JobDescriptions",
   "permissions":["activeTab","tabs","storage"],
   "host_permissions":[
     "<all_urls>"
