@@ -31,7 +31,7 @@ document.getElementById("saveBtn").addEventListener("click", () => {
 
 });
 async function testAI(jobDescription,userSkills) {
-    const response = await fetch("http://localhost:3000/analyze", {
+    const response = await fetch("https://skill-gap-analyzer-extension.onrender.com/analyze", {
     method: "POST",
 
     headers: {
