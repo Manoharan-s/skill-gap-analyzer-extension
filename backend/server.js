@@ -7,6 +7,9 @@ const app = express();
 
 // Allow requests from your Chrome Extension
 app.use(cors());
+app.get("/", (req, res) => {
+    res.send("Skill Gap Analyzer backend is running!");
+});
 
 // Convert incoming JSON into JavaScript objects
 app.use(express.json());
@@ -385,6 +388,7 @@ ${jobDescription}
     }
 
 });
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;
